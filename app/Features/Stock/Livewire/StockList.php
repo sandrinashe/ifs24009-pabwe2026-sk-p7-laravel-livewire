@@ -286,6 +286,7 @@ class StockList extends Component
 
         return view('livewire.stock.stock-list', [
             'stocks' => $stocks,
+            'summary' => $stockService->getSummaryForUser(Auth::id()),
             'statuses' => StockStatus::cases(),
         ]);
     }

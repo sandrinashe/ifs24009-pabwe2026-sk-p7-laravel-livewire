@@ -23,6 +23,16 @@ class StockService
     }
 
     /**
+     * Get the stock summary (counts, units, inventory value) for the specified user.
+     *
+     * @return array{items: int, units: int, low: int, out: int, value: float}
+     */
+    public function getSummaryForUser(int $userId): array
+    {
+        return $this->stockRepository->summaryForUser($userId);
+    }
+
+    /**
      * Create a new stock item for the user. Status is derived from quantity vs min_stock.
      *
      * @param array<string, mixed> $data

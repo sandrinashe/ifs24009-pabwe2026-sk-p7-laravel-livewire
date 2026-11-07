@@ -2,6 +2,8 @@
 
 use App\Features\Admin\Livewire\AdminUserStockList;
 use App\Features\Admin\Livewire\UserList;
+use App\Features\Auth\Livewire\AdminLogin;
+use App\Features\Auth\Livewire\AdminRegister;
 use App\Features\Auth\Livewire\Login;
 use App\Features\Auth\Livewire\Register;
 use App\Features\Stock\Livewire\StockList;
@@ -24,6 +26,10 @@ Route::middleware(['throttle:1000-per-second'])->group(function () {
     Route::middleware('guest')->group(function () {
         Route::get('/login', Login::class)->name('login');
         Route::get('/register', Register::class)->name('register');
+
+        // Halaman masuk & daftar khusus admin
+        Route::get('/admin/login', AdminLogin::class)->name('admin.login');
+        Route::get('/admin/register', AdminRegister::class)->name('admin.register');
     });
 
     // Authenticated Routes

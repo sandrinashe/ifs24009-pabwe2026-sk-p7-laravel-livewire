@@ -45,6 +45,31 @@ class StockRepository implements StockRepositoryInterface
     }
 
     /**
+     * Summarize a user's stock: item count, total units, low/out counts and inventory value.
+     *
+     * @return array{items: int, units: int, low: int, out: int, value: float}
+     */
+    public function summaryForUser(int $userId): array
+    {
+        $row = Stock::query()
+            ->where('user_id', $userId)
+            ->selectRaw('COUNT(*) as items')
+            ->selectRaw('COALESCE(SUM(quantity), 0) as units')
+            ->selectRaw("COALESCE(SUM(CASE WHEN status = 'low_stock' THEN 1 ELSE 0 END), 0) as low")
+            ->selectRaw("COALESCE(SUM(CASE WHEN status = 'out_of_stock' THEN 1 ELSE 0 END), 0) as out_count")
+            ->selectRaw('COALESCE(SUM(quantity * COALESCE(price, 0)), 0) as total_value')
+            ->first();
+
+        return [
+            'items' => (int) $row->items,
+            'units' => (int) $row->units,
+            'low' => (int) $row->low,
+            'out' => (int) $row->out_count,
+            'value' => (float) $row->total_value,
+        ];
+    }
+
+    /**
      * Find a stock by id.
      */
     public function find(int $id): ?Stock

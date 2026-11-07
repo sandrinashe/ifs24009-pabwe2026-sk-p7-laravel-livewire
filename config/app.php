@@ -58,6 +58,18 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Kode Akses Pendaftaran Admin
+    |--------------------------------------------------------------------------
+    |
+    | Pendaftaran admin (/admin/register) hanya aktif bila nilai ini diisi.
+    | Kosongkan untuk menonaktifkan pendaftaran admin.
+    |
+    */
+
+    'admin_registration_code' => env('ADMIN_REGISTRATION_CODE', ''),
+
+    /*
+    |--------------------------------------------------------------------------
     | Application Timezone
     |--------------------------------------------------------------------------
     |

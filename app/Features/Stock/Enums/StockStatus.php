@@ -20,9 +20,21 @@ enum StockStatus: string
     public function badgeClass(): string
     {
         return match ($this) {
-            self::AVAILABLE => 'bg-emerald-100 text-emerald-800 border-emerald-300',
+            self::AVAILABLE => 'bg-sage-100 text-sage-800 border-sage-300',
             self::LOW_STOCK => 'bg-amber-100 text-amber-800 border-amber-300',
-            self::OUT_OF_STOCK => 'bg-red-100 text-red-800 border-red-300',
+            self::OUT_OF_STOCK => 'bg-rose-100 text-rose-800 border-rose-300',
+        };
+    }
+
+    /**
+     * Tailwind background class for the stock level bar.
+     */
+    public function barClass(): string
+    {
+        return match ($this) {
+            self::AVAILABLE => 'bg-sage-500',
+            self::LOW_STOCK => 'bg-amber-400',
+            self::OUT_OF_STOCK => 'bg-rose-400',
         };
     }
 

@@ -16,7 +16,9 @@ Aplikasi **Manajemen Stok Barang (Inventaris)** dengan arsitektur **Feature-Firs
 - Generate item stok dengan AI -> preview -> pilih -> simpan.
 - Profil (ubah data, password, foto).
 
-**Admin** (`/admin/users`, `/admin/users/{user}/stocks`)
+**Admin** (`/admin/login`, `/admin/register`, `/admin/users`, `/admin/users/{user}/stocks`)
+- Login khusus admin di `/admin/login` (akun member ditolak di halaman ini). Tautan ke halaman admin ada di halaman login/register member dan di header.
+- Registrasi admin di `/admin/register` memerlukan **kode akses** dari `ADMIN_REGISTRATION_CODE` di `.env` (maks. 5 percobaan per menit per IP). Kalau kosong, pendaftaran admin dinonaktifkan.
 - Melihat daftar user beserta jumlah stok, dan stok tiap user secara **read-only**.
 
 ## Keamanan & Kualitas
@@ -55,6 +57,8 @@ php artisan serve
 ```
 
 Akun seeder: `admin` / `admin` (role admin) dan `member` / `member` (role member, dengan beberapa contoh stok).
+
+Isi `ADMIN_REGISTRATION_CODE` di `.env` (misalnya `ADMIN_REGISTRATION_CODE=kode-rahasia-anda`) bila ingin membuka pendaftaran admin.
 
 Konfigurasi AI di `.env`: `OPENAI_ENDPOINT`, `OPENAI_KEY`, `OPENAI_MODEL`. Jangan commit `.env`.
 

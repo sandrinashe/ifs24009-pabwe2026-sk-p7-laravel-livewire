@@ -21,6 +21,13 @@ interface StockRepositoryInterface
     public function allForUser(int $userId): Collection;
 
     /**
+     * Summarize a user's stock: item count, total units, low/out counts and inventory value.
+     *
+     * @return array{items: int, units: int, low: int, out: int, value: float}
+     */
+    public function summaryForUser(int $userId): array;
+
+    /**
      * Find a stock by id.
      */
     public function find(int $id): ?Stock;

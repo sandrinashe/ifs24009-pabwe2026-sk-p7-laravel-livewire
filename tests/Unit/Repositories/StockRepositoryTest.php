@@ -122,5 +122,33 @@ class StockRepositoryTest extends TestCase
         $this->assertTrue($result);
         $this->assertDatabaseCount('stocks', 2);
     }
-}
 
+    public function test_summary_for_user(): void
+    {
+        $user = User::factory()->create();
+        $other = User::factory()->create();
+
+        Stock::factory()->create(['user_id' => $user->id, 'quantity' => 10, 'price' => 1000, 'status' => 'available']);
+        Stock::factory()->create(['user_id' => $user->id, 'quantity' => 2, 'price' => 500, 'status' => 'low_stock']);
+        Stock::factory()->create(['user_id' => $user->id, 'quantity' => 0, 'price' => null, 'status' => 'out_of_stock']);
+        Stock::factory()->create(['user_id' => $other->id, 'quantity' => 99, 'price' => 1, 'status' => 'available']);
+
+        $summary = $this->repository->summaryForUser($user->id);
+
+        $this->assertSame(3, $summary['items']);
+        $this->assertSame(12, $summary['units']);
+        $this->assertSame(1, $summary['low']);
+        $this->assertSame(1, $summary['out']);
+        $this->assertEquals(11000.0, $summary['value']);
+    }
+
+    public function test_summary_for_user_without_stock_is_all_zero(): void
+    {
+        $user = User::factory()->create();
+
+        $this->assertSame(
+            ['items' => 0, 'units' => 0, 'low' => 0, 'out' => 0, 'value' => 0.0],
+            $this->repository->summaryForUser($user->id)
+        );
+    }
+}

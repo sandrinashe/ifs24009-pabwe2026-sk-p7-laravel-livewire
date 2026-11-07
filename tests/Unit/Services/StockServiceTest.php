@@ -34,6 +34,19 @@ class StockServiceTest extends TestCase
         $this->assertCount(2, $paginator);
     }
 
+    public function test_get_summary_for_user(): void
+    {
+        $user = User::factory()->create();
+        Stock::factory()->create(['user_id' => $user->id, 'quantity' => 4, 'price' => 250, 'status' => 'low_stock']);
+
+        $summary = $this->service->getSummaryForUser($user->id);
+
+        $this->assertSame(1, $summary['items']);
+        $this->assertSame(4, $summary['units']);
+        $this->assertSame(1, $summary['low']);
+        $this->assertEquals(1000.0, $summary['value']);
+    }
+
     public function test_create_stock_derives_status_from_quantity(): void
     {
         $user = User::factory()->create();

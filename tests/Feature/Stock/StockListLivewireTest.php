@@ -346,4 +346,48 @@ class StockListLivewireTest extends TestCase
             ->call('closeAiModal')
             ->assertSet('showAiModal', false);
     }
+
+    public function test_list_shows_summary_filters_and_cover_thumbnail(): void
+    {
+        \Illuminate\Support\Facades\Storage::fake('public');
+        \Illuminate\Support\Facades\Storage::disk('public')->put('stock-covers/thumb.png', 'content');
+
+        $user = User::factory()->member()->create();
+        $this->actingAs($user);
+
+        Stock::factory()->create([
+            'user_id' => $user->id,
+            'name' => 'Barang Bergambar',
+            'quantity' => 10,
+            'price' => 2000,
+            'cover_image_path' => 'stock-covers/thumb.png',
+        ]);
+        Stock::factory()->lowStock()->create(['user_id' => $user->id, 'name' => 'Barang Tanpa Harga', 'price' => null]);
+        Stock::factory()->outOfStock()->create(['user_id' => $user->id]);
+
+        Livewire::test(StockList::class)
+            ->assertSee('Barang Bergambar')
+            ->assertSee('Harga belum diisi')
+            ->assertSee('Rp 2.000')
+            ->assertSeeHtml('stock-covers/thumb.png')
+            ->assertSeeHtml('id="summary-items">3<')
+            ->assertSeeHtml('id="summary-low">1<')
+            ->assertSeeHtml('id="summary-out">1<')
+            ->assertSee('Tersedia')
+            ->assertSee('Stok Menipis')
+            ->assertSee('Stok Habis')
+            ->set('statusFilter', 'low_stock')
+            ->assertSee('Barang Tanpa Harga')
+            ->assertDontSee('Barang Bergambar');
+    }
+
+    public function test_empty_state_is_shown_without_stock(): void
+    {
+        $user = User::factory()->member()->create();
+        $this->actingAs($user);
+
+        Livewire::test(StockList::class)
+            ->assertSee('Belum ada stok barang ditemukan')
+            ->assertSeeHtml('id="summary-items">0<');
+    }
 }
