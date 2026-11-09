@@ -38,8 +38,8 @@
         </div>
 
         <div class="flex items-center space-x-3 w-full sm:w-auto">
-            <label class="text-xs font-semibold text-stone-600 uppercase tracking-wider">Status:</label>
-            <select wire:model.live="statusFilter" class="px-3 py-2 text-sm rounded-lg border border-stone-300 focus:outline-none focus:ring-2 focus:ring-petal-500 bg-white">
+            <label for="admin-status-filter" class="text-xs font-semibold text-stone-600 uppercase tracking-wider">Status:</label>
+            <select id="admin-status-filter" wire:model.live="statusFilter" class="px-3 py-2 text-sm rounded-lg border border-stone-300 focus:outline-none focus:ring-2 focus:ring-petal-500 bg-white">
                 <option value="">Semua Status</option>
                 @foreach ($statuses as $status)
                     <option value="{{ $status->value }}">{{ $status->label() }}</option>
@@ -66,7 +66,7 @@
                 <tbody class="divide-y divide-petal-100">
                     @forelse ($stocks as $index => $stock)
                         <tr class="hover:bg-stone-50/80 transition">
-                            <td class="py-4 px-6 text-stone-500 text-xs">
+                            <td class="py-4 px-6 text-stone-600 text-xs">
                                 {{ $stocks->firstItem() + $index }}
                             </td>
                             <td class="py-4 px-6 font-semibold text-olive-900">

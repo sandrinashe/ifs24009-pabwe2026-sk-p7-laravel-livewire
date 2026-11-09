@@ -1,8 +1,4 @@
 <div>
-    <!-- Toast UI Editor CDN Styles & Scripts -->
-    <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
-    <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
-
     <!-- Top Navigation Header -->
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
         <div class="flex items-center space-x-3">
@@ -46,11 +42,11 @@
             </div>
 
             <!-- Delete Button -->
-            <button wire:click="confirmDeleteStock" wire:loading.attr="disabled" class="inline-flex items-center space-x-1 px-3 py-2 bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200 text-xs font-semibold rounded-lg transition disabled:opacity-75">
-                <svg wire:loading.remove wire:target="confirmDeleteStock" class="w-4 h-4 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <button wire:click="confirmDeleteStock" wire:loading.attr="disabled" class="inline-flex items-center space-x-1 px-3 py-2 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-xs font-semibold rounded-lg transition disabled:opacity-75">
+                <svg wire:loading.remove wire:target="confirmDeleteStock" class="w-4 h-4 text-rose-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                 </svg>
-                <svg wire:loading wire:target="confirmDeleteStock" class="animate-spin w-4 h-4 text-rose-600" fill="none" viewBox="0 0 24 24">
+                <svg wire:loading wire:target="confirmDeleteStock" class="animate-spin w-4 h-4 text-rose-700" fill="none" viewBox="0 0 24 24">
                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                     <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
                 </svg>
@@ -181,24 +177,23 @@
                 <!-- Render using Toast UI Viewer -->
                 <div wire:ignore
                      x-data="{
-                         init() {
-                             if (window.toastui && toastui.Editor) {
-                                 toastui.Editor.factory({
-                                     el: this.$refs.viewerContainer,
-                                     viewer: true,
-                                     initialValue: @js($stock->description)
-                                 });
-                             }
+                         async init() {
+                             await window.loadToastUi();
+                             toastui.Editor.factory({
+                                 el: this.$refs.viewerContainer,
+                                 viewer: true,
+                                 initialValue: @js($stock->description)
+                             });
                          }
                      }"
                      class="prose prose-slate max-w-none text-olive-800">
                     <div x-ref="viewerContainer"></div>
                 </div>
             @else
-                <div class="py-12 text-center text-stone-500">
+                <div class="py-12 text-center text-stone-600">
                     <svg class="w-10 h-10 mx-auto mb-2 text-stone-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                     <p class="text-sm font-medium text-stone-700">Belum ada deskripsi untuk stock ini</p>
-                    <p class="text-xs text-stone-500 mt-1">Tambahkan catatan, langkah kerja, atau daftar checklist dengan Toast UI Editor.</p>
+                    <p class="text-xs text-stone-600 mt-1">Tambahkan catatan, langkah kerja, atau daftar checklist dengan Toast UI Editor.</p>
                     <button wire:click="openEditModal" class="mt-4 px-3.5 py-1.5 text-xs font-semibold text-petal-600 hover:text-petal-700 bg-petal-50 hover:bg-petal-100 rounded-lg transition">
                         + Tambahkan Deskripsi Sekarang
                     </button>
@@ -229,38 +224,38 @@
                     <div class="space-y-5 px-6 py-5 overflow-y-auto flex-1">
                         <!-- Nama Barang -->
                         <div>
-                            <label class="block text-sm font-semibold text-olive-800 mb-1">Nama Barang</label>
-                            <input wire:model="name" type="text" class="w-full px-4 py-2 text-sm font-medium rounded-xl border border-stone-300 focus:outline-none focus:ring-2 focus:ring-petal-500" placeholder="Masukkan judul stock..." required>
-                            @error('name') <span class="text-xs text-rose-600 mt-1 block">{{ $message }}</span> @enderror
+                            <label for="sd-name" class="block text-sm font-semibold text-olive-800 mb-1">Nama Barang</label>
+                            <input id="sd-name" wire:model="name" type="text" class="w-full px-4 py-2 text-sm font-medium rounded-xl border border-stone-300 focus:outline-none focus:ring-2 focus:ring-petal-500" placeholder="Masukkan judul stock..." required>
+                            @error('name') <span class="text-xs text-rose-700 mt-1 block">{{ $message }}</span> @enderror
                         </div>
 
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
-                                <label class="block text-sm font-semibold text-olive-800 mb-1">SKU</label>
-                                <input wire:model="sku" type="text"  class="w-full px-3.5 py-2 text-sm rounded-xl border border-stone-300 focus:outline-none focus:ring-2 focus:ring-petal-500 bg-white">
-                                @error('sku') <span class="text-xs text-rose-600 mt-1 block">{{ $message }}</span> @enderror
+                                <label for="sd-sku" class="block text-sm font-semibold text-olive-800 mb-1">SKU</label>
+                                <input id="sd-sku" wire:model="sku" type="text"  class="w-full px-3.5 py-2 text-sm rounded-xl border border-stone-300 focus:outline-none focus:ring-2 focus:ring-petal-500 bg-white">
+                                @error('sku') <span class="text-xs text-rose-700 mt-1 block">{{ $message }}</span> @enderror
                             </div>
                             <div>
-                                <label class="block text-sm font-semibold text-olive-800 mb-1">Satuan (Unit)</label>
-                                <input wire:model="unit" type="text"  class="w-full px-3.5 py-2 text-sm rounded-xl border border-stone-300 focus:outline-none focus:ring-2 focus:ring-petal-500 bg-white">
-                                @error('unit') <span class="text-xs text-rose-600 mt-1 block">{{ $message }}</span> @enderror
+                                <label for="sd-unit" class="block text-sm font-semibold text-olive-800 mb-1">Satuan (Unit)</label>
+                                <input id="sd-unit" wire:model="unit" type="text"  class="w-full px-3.5 py-2 text-sm rounded-xl border border-stone-300 focus:outline-none focus:ring-2 focus:ring-petal-500 bg-white">
+                                @error('unit') <span class="text-xs text-rose-700 mt-1 block">{{ $message }}</span> @enderror
                             </div>
                         </div>
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                             <div>
-                                <label class="block text-sm font-semibold text-olive-800 mb-1">Jumlah (Quantity)</label>
-                                <input wire:model="quantity" type="number" min="0" class="w-full px-3.5 py-2 text-sm rounded-xl border border-stone-300 focus:outline-none focus:ring-2 focus:ring-petal-500 bg-white">
-                                @error('quantity') <span class="text-xs text-rose-600 mt-1 block">{{ $message }}</span> @enderror
+                                <label for="sd-quantity" class="block text-sm font-semibold text-olive-800 mb-1">Jumlah (Quantity)</label>
+                                <input id="sd-quantity" wire:model="quantity" type="number" min="0" class="w-full px-3.5 py-2 text-sm rounded-xl border border-stone-300 focus:outline-none focus:ring-2 focus:ring-petal-500 bg-white">
+                                @error('quantity') <span class="text-xs text-rose-700 mt-1 block">{{ $message }}</span> @enderror
                             </div>
                             <div>
-                                <label class="block text-sm font-semibold text-olive-800 mb-1">Harga (Price)</label>
-                                <input wire:model="price" type="number" min="0" step="0.01" class="w-full px-3.5 py-2 text-sm rounded-xl border border-stone-300 focus:outline-none focus:ring-2 focus:ring-petal-500 bg-white">
-                                @error('price') <span class="text-xs text-rose-600 mt-1 block">{{ $message }}</span> @enderror
+                                <label for="sd-price" class="block text-sm font-semibold text-olive-800 mb-1">Harga (Price)</label>
+                                <input id="sd-price" wire:model="price" type="number" min="0" step="0.01" class="w-full px-3.5 py-2 text-sm rounded-xl border border-stone-300 focus:outline-none focus:ring-2 focus:ring-petal-500 bg-white">
+                                @error('price') <span class="text-xs text-rose-700 mt-1 block">{{ $message }}</span> @enderror
                             </div>
                             <div>
-                                <label class="block text-sm font-semibold text-olive-800 mb-1">Min. Stok</label>
-                                <input wire:model="minStock" type="number" min="0" class="w-full px-3.5 py-2 text-sm rounded-xl border border-stone-300 focus:outline-none focus:ring-2 focus:ring-petal-500 bg-white">
-                                @error('minStock') <span class="text-xs text-rose-600 mt-1 block">{{ $message }}</span> @enderror
+                                <label for="sd-minStock" class="block text-sm font-semibold text-olive-800 mb-1">Min. Stok</label>
+                                <input id="sd-minStock" wire:model="minStock" type="number" min="0" class="w-full px-3.5 py-2 text-sm rounded-xl border border-stone-300 focus:outline-none focus:ring-2 focus:ring-petal-500 bg-white">
+                                @error('minStock') <span class="text-xs text-rose-700 mt-1 block">{{ $message }}</span> @enderror
                             </div>
                         </div>
                         <p class="text-xs text-stone-600">Status ditentukan otomatis dari jumlah dibanding min. stok.</p>
@@ -268,15 +263,16 @@
                         <!-- Deskripsi Stock with Toast UI Editor -->
                         <div>
                             <div class="flex items-center justify-between mb-1">
-                                <label class="block text-sm font-semibold text-olive-800">Deskripsi Stock (Toast UI Editor)</label>
-                                <span class="text-xs text-stone-500">Markdown & WYSIWYG</span>
+                                <span class="block text-sm font-semibold text-olive-800">Deskripsi Stock (Toast UI Editor)</span>
+                                <span class="text-xs text-stone-600">Markdown & WYSIWYG</span>
                             </div>
 
                             <div wire:ignore
                                  x-data="{
                                      desc: @entangle('description'),
                                      editor: null,
-                                     init() {
+                                     async init() {
+                                         await window.loadToastUi();
                                          this.editor = new toastui.Editor({
                                              el: this.$refs.detailEditorContainer,
                                              height: '350px',
@@ -301,7 +297,7 @@
                                  class="rounded-xl border border-stone-300 overflow-hidden bg-white">
                                 <div x-ref="detailEditorContainer"></div>
                             </div>
-                            @error('description') <span class="text-xs text-rose-600 mt-1 block">{{ $message }}</span> @enderror
+                            @error('description') <span class="text-xs text-rose-700 mt-1 block">{{ $message }}</span> @enderror
                         </div>
                     </div>
 

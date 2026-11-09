@@ -1,8 +1,4 @@
 <div>
-    <!-- Toast UI Editor CDN Styles & Scripts -->
-    <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
-    <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
-
     @php
         $fmtRp = fn ($n) => 'Rp '.number_format((float) $n, 0, ',', '.');
         $filterChips = ['' => 'Semua'] + collect($statuses)->mapWithKeys(fn ($st) => [$st->value => $st->label()])->all();
@@ -68,9 +64,9 @@
     <div class="bg-white/90 p-3 sm:p-4 rounded-3xl shadow-sm border border-petal-100 mb-6 flex flex-col md:flex-row gap-3 md:items-center md:justify-between">
         <div class="w-full md:w-80 relative">
             <label for="stock-search" class="sr-only">Cari nama, SKU, atau deskripsi</label>
-            <svg class="w-4 h-4 text-stone-500 absolute left-3.5 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M17 10a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            <svg class="w-4 h-4 text-stone-600 absolute left-3.5 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M17 10a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
             <input id="stock-search" wire:model.live.debounce.300ms="search" type="text" placeholder="Cari nama, SKU, atau deskripsi..."
-                class="w-full pl-10 pr-9 py-2.5 text-sm rounded-full border border-petal-200 bg-cream focus:outline-none focus:ring-2 focus:ring-petal-400 focus:border-transparent placeholder:text-stone-500">
+                class="w-full pl-10 pr-9 py-2.5 text-sm rounded-full border border-petal-200 bg-cream focus:outline-none focus:ring-2 focus:ring-petal-400 focus:border-transparent placeholder:text-stone-600">
             <div wire:loading wire:target="search,statusFilter" class="absolute right-3.5 top-1/2 -translate-y-1/2">
                 <svg class="animate-spin h-4 w-4 text-petal-600" fill="none" viewBox="0 0 24 24" aria-hidden="true">
                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -93,7 +89,7 @@
     <!-- Stock Cards -->
     @if ($stocks->isEmpty())
         <div class="rounded-3xl border border-dashed border-petal-300 bg-white/80 py-16 px-6 text-center">
-            <p class="text-4xl text-petal-400" aria-hidden="true">✦</p>
+            <p class="text-4xl text-petal-600" aria-hidden="true">✦</p>
             <p class="font-display text-2xl font-bold text-olive-800 mt-2">Belum ada stok barang ditemukan</p>
             <p class="text-sm text-stone-700 mt-1">Tambah stok baru atau generate otomatis menggunakan AI.</p>
         </div>
@@ -245,26 +241,27 @@
                 <form wire:submit.prevent="saveStock" class="flex flex-col flex-1 min-h-0">
                     <div class="space-y-4 px-6 py-5 overflow-y-auto flex-1">
                         <div>
-                            <label class="block text-sm font-medium text-stone-700 mb-1">Nama Barang</label>
-                            <input wire:model="formName" type="text"
+                            <label for="sl-formName" class="block text-sm font-medium text-stone-700 mb-1">Nama Barang</label>
+                            <input id="sl-formName" wire:model="formName" type="text"
                                 class="w-full px-3.5 py-2 rounded-lg border border-stone-300 focus:outline-none focus:ring-2 focus:ring-petal-500 text-sm"
                                 placeholder="Contoh: Kertas HVS A4 80gsm" required>
                             @error('formName')
-                                <span class="text-xs text-rose-600 mt-1 block">{{ $message }}</span>
+                                <span class="text-xs text-rose-700 mt-1 block">{{ $message }}</span>
                             @enderror
                         </div>
 
                         <div>
                             <div class="flex items-center justify-between mb-1">
-                                <label class="block text-sm font-medium text-stone-700">Deskripsi (Toast UI Editor)</label>
-                                <span class="text-xs text-stone-500">Markdown & WYSIWYG</span>
+                                <span class="block text-sm font-medium text-stone-700">Deskripsi (Toast UI Editor)</span>
+                                <span class="text-xs text-stone-600">Markdown & WYSIWYG</span>
                             </div>
 
                             <div wire:ignore
                                  x-data="{
                                      desc: @entangle('formDescription'),
                                      editor: null,
-                                     init() {
+                                     async init() {
+                                         await window.loadToastUi();
                                          this.editor = new toastui.Editor({
                                              el: this.$refs.formEditorContainer,
                                              height: '260px',
@@ -290,51 +287,51 @@
                                 <div x-ref="formEditorContainer"></div>
                             </div>
                             @error('formDescription')
-                                <span class="text-xs text-rose-600 mt-1 block">{{ $message }}</span>
+                                <span class="text-xs text-rose-700 mt-1 block">{{ $message }}</span>
                             @enderror
                         </div>
 
                         <div class="grid grid-cols-2 gap-4">
                             <div>
-                                <label class="block text-sm font-medium text-stone-700 mb-1">SKU</label>
-                                <input wire:model="formSku" type="text" placeholder="ATK-001"
+                                <label for="sl-formSku" class="block text-sm font-medium text-stone-700 mb-1">SKU</label>
+                                <input id="sl-formSku" wire:model="formSku" type="text" placeholder="ATK-001"
                                     class="w-full px-3.5 py-2 rounded-lg border border-stone-300 focus:outline-none focus:ring-2 focus:ring-petal-500 text-sm bg-white">
                                 @error('formSku')
-                                    <span class="text-xs text-rose-600 mt-1 block">{{ $message }}</span>
+                                    <span class="text-xs text-rose-700 mt-1 block">{{ $message }}</span>
                                 @enderror
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-stone-700 mb-1">Satuan (Unit)</label>
-                                <input wire:model="formUnit" type="text" placeholder="pcs"
+                                <label for="sl-formUnit" class="block text-sm font-medium text-stone-700 mb-1">Satuan (Unit)</label>
+                                <input id="sl-formUnit" wire:model="formUnit" type="text" placeholder="pcs"
                                     class="w-full px-3.5 py-2 rounded-lg border border-stone-300 focus:outline-none focus:ring-2 focus:ring-petal-500 text-sm bg-white">
                                 @error('formUnit')
-                                    <span class="text-xs text-rose-600 mt-1 block">{{ $message }}</span>
+                                    <span class="text-xs text-rose-700 mt-1 block">{{ $message }}</span>
                                 @enderror
                             </div>
                         </div>
                         <div class="grid grid-cols-3 gap-4">
                             <div>
-                                <label class="block text-sm font-medium text-stone-700 mb-1">Jumlah (Quantity)</label>
-                                <input wire:model="formQuantity" type="number" min="0"
+                                <label for="sl-formQuantity" class="block text-sm font-medium text-stone-700 mb-1">Jumlah (Quantity)</label>
+                                <input id="sl-formQuantity" wire:model="formQuantity" type="number" min="0"
                                     class="w-full px-3.5 py-2 rounded-lg border border-stone-300 focus:outline-none focus:ring-2 focus:ring-petal-500 text-sm bg-white">
                                 @error('formQuantity')
-                                    <span class="text-xs text-rose-600 mt-1 block">{{ $message }}</span>
+                                    <span class="text-xs text-rose-700 mt-1 block">{{ $message }}</span>
                                 @enderror
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-stone-700 mb-1">Harga (Price)</label>
-                                <input wire:model="formPrice" type="number" min="0" step="0.01"
+                                <label for="sl-formPrice" class="block text-sm font-medium text-stone-700 mb-1">Harga (Price)</label>
+                                <input id="sl-formPrice" wire:model="formPrice" type="number" min="0" step="0.01"
                                     class="w-full px-3.5 py-2 rounded-lg border border-stone-300 focus:outline-none focus:ring-2 focus:ring-petal-500 text-sm bg-white">
                                 @error('formPrice')
-                                    <span class="text-xs text-rose-600 mt-1 block">{{ $message }}</span>
+                                    <span class="text-xs text-rose-700 mt-1 block">{{ $message }}</span>
                                 @enderror
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-stone-700 mb-1">Min. Stok</label>
-                                <input wire:model="formMinStock" type="number" min="0"
+                                <label for="sl-formMinStock" class="block text-sm font-medium text-stone-700 mb-1">Min. Stok</label>
+                                <input id="sl-formMinStock" wire:model="formMinStock" type="number" min="0"
                                     class="w-full px-3.5 py-2 rounded-lg border border-stone-300 focus:outline-none focus:ring-2 focus:ring-petal-500 text-sm bg-white">
                                 @error('formMinStock')
-                                    <span class="text-xs text-rose-600 mt-1 block">{{ $message }}</span>
+                                    <span class="text-xs text-rose-700 mt-1 block">{{ $message }}</span>
                                 @enderror
                             </div>
                         </div>
@@ -385,13 +382,13 @@
                 <form wire:submit.prevent="importExcel" class="flex flex-col">
                     <div class="space-y-4 px-6 py-5">
                         <div>
-                            <label class="block text-sm font-medium text-stone-700 mb-1">Pilih File (.xlsx, .xls,
+                            <label for="sl-importFile" class="block text-sm font-medium text-stone-700 mb-1">Pilih File (.xlsx, .xls,
                                 .csv)</label>
-                            <input wire:model="importFile" type="file" accept=".xlsx,.xls,.csv"
+                            <input id="sl-importFile" wire:model="importFile" type="file" accept=".xlsx,.xls,.csv"
                                 class="w-full text-sm text-stone-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-sage-50 file:text-sage-700 hover:file:bg-sage-100"
                                 required>
                             @error('importFile')
-                                <span class="text-xs text-rose-600 mt-1 block">{{ $message }}</span>
+                                <span class="text-xs text-rose-700 mt-1 block">{{ $message }}</span>
                             @enderror
                         </div>
 
@@ -464,27 +461,27 @@
 
                     <div class="space-y-3">
                         <div>
-                            <label class="block text-sm font-medium text-stone-700 mb-1">Permintaan Anda /
+                            <label for="sl-aiPrompt" class="block text-sm font-medium text-stone-700 mb-1">Permintaan Anda /
                                 Prompt</label>
-                            <textarea wire:model="aiPrompt" rows="3"
+                            <textarea id="sl-aiPrompt" wire:model="aiPrompt" rows="3"
                                 class="w-full px-3.5 py-2.5 rounded-lg border border-stone-300 focus:outline-none focus:ring-2 focus:ring-sage-500 text-sm"
                                 placeholder="Contoh: Buatkan rencana belajar Laravel Livewire selama 3 hari untuk pemula..."></textarea>
                             @error('aiPrompt')
-                                <span class="text-xs text-rose-600 mt-1 block">{{ $message }}</span>
+                                <span class="text-xs text-rose-700 mt-1 block">{{ $message }}</span>
                             @enderror
                         </div>
 
                         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                             <div>
                                 <div class="flex items-center space-x-2">
-                                    <label class="text-xs font-medium text-stone-700">Jumlah item:</label>
-                                    <input wire:model="aiCount" type="number" min="1"
+                                    <label for="sl-aiCount" class="text-xs font-medium text-stone-700">Jumlah item:</label>
+                                    <input id="sl-aiCount" wire:model="aiCount" type="number" min="1"
                                         class="w-20 px-2.5 py-1 text-xs rounded-lg border border-stone-300 bg-white focus:outline-none focus:ring-2 focus:ring-sage-500 font-medium text-center"
                                         placeholder="3">
-                                    <span class="text-xs text-stone-500">item</span>
+                                    <span class="text-xs text-stone-600">item</span>
                                 </div>
                                 @error('aiCount')
-                                    <span class="text-xs text-rose-600 mt-1 block">{{ $message }}</span>
+                                    <span class="text-xs text-rose-700 mt-1 block">{{ $message }}</span>
                                 @enderror
                             </div>
 
@@ -506,13 +503,13 @@
                     <!-- AI In-Progress Waiting Banner -->
                     <div wire:loading wire:target="generateWithAi"
                         class="p-6 bg-sage-50 rounded-xl border border-sage-200 text-center space-y-2">
-                        <svg class="animate-spin h-7 w-7 text-sage-600 mx-auto" fill="none" viewBox="0 0 24 24">
+                        <svg class="animate-spin h-7 w-7 text-sage-700 mx-auto" fill="none" viewBox="0 0 24 24">
                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
                                 stroke-width="4"></circle>
                             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
                         </svg>
                         <p class="text-sm font-semibold text-sage-900">Menghubungi AI untuk menyusun item stok...</p>
-                        <p class="text-xs text-sage-600">Mohon tunggu beberapa detik, item stok terstruktur sedang
+                        <p class="text-xs text-sage-700">Mohon tunggu beberapa detik, item stok terstruktur sedang
                             digenerate.</p>
                     </div>
 
@@ -526,11 +523,11 @@
                                         class="flex items-start space-x-3 p-3 rounded-lg border border-petal-100 bg-stone-50 hover:bg-sage-50/50 cursor-pointer transition">
                                         <input wire:model="aiSelectedIndices" value="{{ $index }}"
                                             type="checkbox"
-                                            class="mt-1 rounded border-stone-300 text-sage-600 focus:ring-sage-500">
+                                            class="mt-1 rounded border-stone-300 text-sage-700 focus:ring-sage-500">
                                         <div class="flex-1 text-xs">
                                             <div class="flex items-center justify-between">
                                                 <span class="font-bold text-olive-900">{{ $item['name'] }}</span>
-                                                <span class="text-stone-500">{{ $item['quantity'] ?? 0 }} {{ $item['unit'] ?? 'pcs' }}@if (!empty($item['sku'])) &middot; {{ $item['sku'] }}@endif</span>
+                                                <span class="text-stone-600">{{ $item['quantity'] ?? 0 }} {{ $item['unit'] ?? 'pcs' }}@if (!empty($item['sku'])) &middot; {{ $item['sku'] }}@endif</span>
                                             </div>
                                             @if (!empty($item['description']))
                                                 <p class="text-stone-700 mt-1">{{ $item['description'] }}</p>

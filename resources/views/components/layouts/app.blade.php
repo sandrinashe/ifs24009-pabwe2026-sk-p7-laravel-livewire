@@ -7,41 +7,9 @@
     <title>{{ $title ?? 'Aplikasi Stok Barang' }} - PABWE 2026</title>
     <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600;1,700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preload" href="{{ asset('fonts/dm-sans-latin-400-normal.woff2') }}" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}?v={{ @filemtime(public_path('css/app.css')) }}">
 
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        // Pink "petal" - aksen utama (tombol, badge, judul)
-                        petal: {
-                            50: '#FFF4F8', 100: '#FDE3EE', 200: '#FACDE0', 300: '#F6A9C8', 400: '#F27DAF',
-                            500: '#EC4F95', 600: '#CF2C7B', 700: '#B02468', 800: '#8F1F55', 900: '#6E1943',
-                        },
-                        // Hijau "sage" - latar section dan status tersedia
-                        sage: {
-                            50: '#F4F8EC', 100: '#E6EFD6', 200: '#D2E2B5', 300: '#B6CE8F', 400: '#98B56C',
-                            500: '#7D9A52', 600: '#637E3F', 700: '#4E6433', 800: '#3F512B', 900: '#2F3E20',
-                        },
-                        // Hijau zaitun gelap - judul dan teks utama
-                        olive: {
-                            50: '#F6F7F1', 100: '#E9ECDD', 200: '#D3D9BC', 300: '#B4BE8F', 400: '#8E9B62',
-                            500: '#6F7E45', 600: '#59673A', 700: '#475330', 800: '#3A4429', 900: '#2C3420',
-                        },
-                        cream: { DEFAULT: '#FFFDF8', 100: '#FBF6EC' },
-                    },
-                    fontFamily: {
-                        sans: ['"DM Sans"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-                        display: ['"Cormorant Garamond"', 'Georgia', 'serif'],
-                    },
-                },
-            },
-        };
-    </script>
     <style>
         [x-cloak] { display: none !important; }
         body {
@@ -131,7 +99,7 @@
                     <a href="{{ route('admin.users') }}"
                        @if(request()->routeIs('admin.*')) aria-current="page" @endif
                        class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition {{ request()->routeIs('admin.*') ? 'bg-petal-100 text-petal-800 font-semibold' : 'text-olive-800 hover:bg-petal-50 hover:text-petal-700' }}">
-                        <svg class="w-5 h-5 {{ request()->routeIs('admin.*') ? 'text-petal-600' : 'text-olive-500' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <svg class="w-5 h-5 {{ request()->routeIs('admin.*') ? 'text-petal-600' : 'text-olive-700' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
                         </svg>
                         <span>User Management</span>
@@ -141,7 +109,7 @@
                 <a href="{{ route('stocks.index') }}"
                    @if(request()->routeIs('stocks.*')) aria-current="page" @endif
                    class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition {{ request()->routeIs('stocks.*') ? 'bg-petal-100 text-petal-800 font-semibold' : 'text-olive-800 hover:bg-petal-50 hover:text-petal-700' }}">
-                    <svg class="w-5 h-5 {{ request()->routeIs('stocks.*') ? 'text-petal-600' : 'text-olive-500' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <svg class="w-5 h-5 {{ request()->routeIs('stocks.*') ? 'text-petal-600' : 'text-olive-700' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                     </svg>
                     <span>Stok Saya</span>
@@ -150,7 +118,7 @@
                 <a href="{{ route('profile') }}"
                    @if(request()->routeIs('profile')) aria-current="page" @endif
                    class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition {{ request()->routeIs('profile') ? 'bg-petal-100 text-petal-800 font-semibold' : 'text-olive-800 hover:bg-petal-50 hover:text-petal-700' }}">
-                    <svg class="w-5 h-5 {{ request()->routeIs('profile') ? 'text-petal-600' : 'text-olive-500' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <svg class="w-5 h-5 {{ request()->routeIs('profile') ? 'text-petal-600' : 'text-olive-700' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                     </svg>
                     <span>Profil Saya</span>
@@ -239,6 +207,26 @@
             </footer>
         </div>
     @endauth
+
+    <script>
+        // Toast UI Editor hanya dimuat saat dibutuhkan (modal/viewer), bukan di setiap halaman.
+        window.loadToastUi = function () {
+            if (window.__toastUiPromise) return window.__toastUiPromise;
+            window.__toastUiPromise = new Promise(function (resolve, reject) {
+                var base = 'https://uicdn.toast.com/editor/3.2.2/';
+                var css = document.createElement('link');
+                css.rel = 'stylesheet';
+                css.href = base + 'toastui-editor.min.css';
+                document.head.appendChild(css);
+                var js = document.createElement('script');
+                js.src = base + 'toastui-editor-all.min.js';
+                js.onload = function () { resolve(window.toastui); };
+                js.onerror = reject;
+                document.head.appendChild(js);
+            });
+            return window.__toastUiPromise;
+        };
+    </script>
 
     @livewireScripts
 </body>
